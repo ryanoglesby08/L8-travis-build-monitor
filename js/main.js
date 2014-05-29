@@ -1,61 +1,20 @@
 $(function() {
-    var serial_connect_cb = function(result) {
-
-        if( result ) {
-            // Open success
-            $("#btn_serial_connect").removeAttr("disabled");
-            $("#btn_serial_connect").val("Disconnect");
-
-            // Start SLCP
-            L8_SLCP.Start();
-        }
-        else {
-            // Open error
-            $("#btn_serial_connect").removeAttr("disabled");
-            $("#btn_serial_connect").val("Connect");
-            $("#serial_status").html("Error connecting to L8 ("+ $('#serial_ports :selected').text() +")");
-        }
-    };
-    var serial_disconnect_cb = function(result) {
-        $("#btn_serial_connect").val("Connect");
-        $("#btn_serial_connect").removeAttr("disabled");
-    };
-
-    var fillPorts = function() {
-        if( !L8_serialPort.systemPorts ) {
-            setTimeout(fillPorts, 100);
-            return;
-        }
-
-        L8_serialPort.systemPorts.forEach(function(port) {
-            $('#serial_ports')
-                .append($("<option></option>")
-                    .attr("value", port.path)
-                    .text(port.path));
-        });
-    };
-
     var OnSLCPommand = function(command) {
 
     };
 
-    L8_serialPort = new SerialPort(serial_connect_cb, serial_disconnect_cb, null, null);
+    L8_serialPort = new SerialPort(portConnector.connected, portConnector.disconnected, null, null);
     L8_SLCP = new SLCP({serialPort: L8_serialPort, OnCommand: OnSLCPommand});
 
-    fillPorts();
+    portConnector.fillPorts();
 });
 
 $(document).on("click", "#btn_serial_connect", function() {
     if( L8_serialPort.isConnected ) {
-        $("#btn_serial_connect").val("Disconnecting...");
-        $("#btn_serial_connect").attr("disabled", "disabled");
-        L8_serialPort.disconnect();
+        portConnector.startDisconnect();
     }
     else {
-        $("#serial_status").html("");
-        $("#btn_serial_connect").val("Connecting...");
-        $("#btn_serial_connect").attr("disabled", "disabled");
-        L8_serialPort.connect($('#serial_ports :selected').text(), null);  // Port, bitrate
+        portConnector.startConnect();
     }
 });
 
