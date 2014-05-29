@@ -9,19 +9,11 @@ $(function() {
     portConnector.fillPorts();
 });
 
-$(document).on("click", "#btn_serial_connect", function() {
-    if( L8_serialPort.isConnected ) {
-        portConnector.startDisconnect();
-    }
-    else {
-        portConnector.startConnect();
-    }
-});
 
 var Color = function(r,g,b) {
-  this.r = r;
-  this.g = g;
-  this.b = b;
+    this.r = r;
+    this.g = g;
+    this.b = b;
 };
 
 Color.WHITE = new Color(15,15,15);
@@ -33,10 +25,25 @@ Color.GREEN = new Color(0,15,0);
 | Matrices |
 \*-------- */
 
-var setMatrix = function(r,g,b) {
+var setMatrix = function(matrix) {
     if( !L8_serialPort.isConnected ) {
         $("#errors").text("Serial Port is not connected");
         return;
+    }
+
+    L8_SLCP.SetRGBMatrix(matrix);
+};
+
+var solidMatrix = function(color) {
+
+    // Default to white
+    if (typeof  color === "undefined") {
+        color = Color.WHITE;
+    }
+
+    // Allow for RGB to be passed
+    if (typeof color === "number" && arguments.length === 3) {
+      color = new Color(arguments[0], arguments[1], arguments[2]);
     }
 
     var matrix = new Array(8);
@@ -49,25 +56,31 @@ var setMatrix = function(r,g,b) {
             matrix[i][j] = color;
         }
     }
-
-    L8_SLCP.SetRGBMatrix(matrix);
-    return matrix;
+    return matrix
 };
 
-var failMatrix = (function() {
-    var matrix = setMatrix(15, 0, 0);
+var failMatrix = function() {
+    var matrix = solidMatrix(15, 0, 0);
     for (var i = 1; i < 7; i++) {
         matrix[i][1] = Color.WHITE;
         matrix[1][i] = Color.WHITE;
         matrix[4][i] = Color.WHITE;
     }
     return matrix;
-})();
-
+};
 
 /* ----------- *\
 | DOM BINDINGS |
 \*------------ */
+
+$(document).on("click", "#btn_serial_connect", function() {
+    if( L8_serialPort.isConnected ) {
+        portConnector.startDisconnect();
+    }
+    else {
+        portConnector.startConnect();
+    }
+});
 
 $(document).on("click", "#start_poll", function() {
     var repo = $("#travis_url").val();
@@ -79,10 +92,10 @@ $(document).on("click", "#start_poll", function() {
         }
     }).done(function(data) {
         if( data.builds[0].state == "passed" ) {
-            setMatrix(0,15,0); //white
+            setMatrix(solidMatrix(Color.GREEN)); //green
         }
         else {
-            L8_SLCP.SetRGBMatrix(failMatrix); //red
+            setMatrix(failMatrix()); //red
         }
     });
 
