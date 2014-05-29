@@ -18,6 +18,21 @@ $(document).on("click", "#btn_serial_connect", function() {
     }
 });
 
+var Color = function(r,g,b) {
+  this.r = r;
+  this.g = g;
+  this.b = b;
+};
+
+Color.WHITE = new Color(15,15,15);
+Color.RED = new Color(15,0,0);
+Color.GREEN = new Color(0,15,0);
+
+
+/* ------- *\
+| Matrices |
+\*-------- */
+
 var setMatrix = function(r,g,b) {
     if( !L8_serialPort.isConnected ) {
         $("#errors").text("Serial Port is not connected");
@@ -31,15 +46,28 @@ var setMatrix = function(r,g,b) {
         matrix[i] = new Array(8);
         for (var j = 0; j < 8; j++)
         {
-            matrix[i][j] = new Object();
-            matrix[i][j].r = r;
-            matrix[i][j].g = g;
-            matrix[i][j].b = b;
+            matrix[i][j] = color;
         }
     }
 
     L8_SLCP.SetRGBMatrix(matrix);
+    return matrix;
 };
+
+var failMatrix = (function() {
+    var matrix = setMatrix(15, 0, 0);
+    for (var i = 1; i < 7; i++) {
+        matrix[i][1] = Color.WHITE;
+        matrix[1][i] = Color.WHITE;
+        matrix[4][i] = Color.WHITE;
+    }
+    return matrix;
+})();
+
+
+/* ----------- *\
+| DOM BINDINGS |
+\*------------ */
 
 $(document).on("click", "#start_poll", function() {
     var repo = $("#travis_url").val();
@@ -54,7 +82,7 @@ $(document).on("click", "#start_poll", function() {
             setMatrix(0,15,0); //white
         }
         else {
-            setMatrix(15,0,0); //red
+            L8_SLCP.SetRGBMatrix(failMatrix); //red
         }
     });
 
@@ -74,10 +102,7 @@ $(document).on("click", "#turnon", function() {
         matrix[i] = new Array(8);
         for (var j = 0; j < 8; j++)
         {
-            matrix[i][j] = new Object();
-            matrix[i][j].r = 15;
-            matrix[i][j].g = 15;
-            matrix[i][j].b = 15;
+            matrix[i][j] = Color.WHITE;
         }
     }
 
