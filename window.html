@@ -1,0 +1,21 @@
+<html>
+<head>
+    <script type="text/javascript" src="js/l8.slcp.class-1.0.js"></script>
+    <script type="text/javascript" src="js/serialport.class-1.0.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+  <input id="travis_url" type="text" /><button id="start_poll">Submit</button>
+
+  <button id="turnon">Test</button>
+  <button id="turnoff">Off</button>
+
+  <div>
+      <label>Connection:</label>
+      <select id="serial_ports"></select> <input id="btn_serial_connect" type="button" value="Connect"> <span id="serial_status"></span>
+  </div>
+
+  <p id="errors"></p>
+</body>
+</html>
