@@ -11,6 +11,7 @@ var portConnector = (function () {
         return $('#serial_ports :selected').text();
     };
 
+
     var connected = function (result) {
         if (result) {
             // Open success
