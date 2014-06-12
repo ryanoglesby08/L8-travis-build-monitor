@@ -7,6 +7,8 @@
     <script type="text/javascript" src="js/color.js"></script>
     <script type="text/javascript" src="js/matrix.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
+
+    <link rel="stylesheet" href="main.css" />
 </head>
 <body>
   <input id="travis_url" type="text" /><button id="start_poll">Submit</button>
@@ -15,10 +17,10 @@
   <button id="turnoff">Off</button>
   <button id="animation">Animate</button>
 
-  <div>
+  <section>
       <label>Connection:</label>
-      <select id="serial_ports"></select> <input id="btn_serial_connect" type="button" value="Connect"> <span id="serial_status"></span>
-  </div>
+      <select id="serial_ports"></select> <input id="btn_serial_connect" type="button" value="Connect"> <span id="serial_status" class="serial-status"></span>
+  </section>
 
   <p id="errors"></p>
 </body>

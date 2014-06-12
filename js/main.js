@@ -1,26 +1,22 @@
+var l8_tbm = {};
+
 $(function() {
     var OnSLCPommand = function(command) {
-
+        // Do nothing
     };
 
-    L8_serialPort = new SerialPort(portConnector.connected, portConnector.disconnected, null, null);
+    l8_tbm.portConnector = new PortConnector();
+
+    L8_serialPort = new SerialPort(l8_tbm.portConnector.onSerialPortConnect, l8_tbm.portConnector.onSerialPortDisconnect, null, null);
     L8_SLCP = new SLCP({serialPort: L8_serialPort, OnCommand: OnSLCPommand});
 
-    portConnector.fillPorts();
+    l8_tbm.portConnector.fillPorts();
 });
 
 /* ----------- *\
 | DOM BINDINGS |
 \*------------ */
 
-$(document).on("click", "#btn_serial_connect", function() {
-    if( L8_serialPort.isConnected ) {
-        portConnector.startDisconnect();
-    }
-    else {
-        portConnector.startConnect();
-    }
-});
 
 $(document).on("click", "#start_poll", function() {
     var repo = $("#travis_url").val();
