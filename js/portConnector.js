@@ -9,26 +9,38 @@ function PortConnector() {
     };
 
     var onSerialPortConnect = function (result) {
-        $buttonElement.removeAttr("disabled");
+        $buttonElement.removeAttr("disabled")
+            .val("Disconnect");
+        L8_SLCP.Start();
+    };
 
-        if (result) {
-            $buttonElement.val("Disconnect");
-            L8_SLCP.Start();
-        }
-        else {
-            $buttonElement.val("Connect");
-            $statusElement.html("Error connecting to L8 (" + selectedPort() + ")");
-        }
+    var onSerialPortConnectError = function () {
+        $buttonElement.removeAttr("disabled")
+                      .val("Connect");
+        $statusElement.html("Error connecting to L8 (" + selectedPort() + ")");
     };
 
     var onSerialPortDisconnect = function () {
-        $buttonElement.val("Connect")
-                      .removeAttr("disabled");
+        $buttonElement.removeAttr("disabled")
+                      .val("Connect");
+    };
+
+
+    var init = function () {
+        $(document).on(l8tbm.events.serialPortConnected, function () {
+            onSerialPortConnect();
+        });
+        $(document).on(l8tbm.events.serialPortConnectErrored, function () {
+            onSerialPortConnectError();
+        });
+        $(document).on(l8tbm.events.serialPortDisconnected, function () {
+            onSerialPortDisconnect();
+        });
     };
 
     var startDisconnect = function () {
         $buttonElement.val("Disconnecting...")
-                      .attr("disabled", "disabled");
+            .attr("disabled", "disabled");
 
         L8_serialPort.disconnect();
     };
@@ -36,7 +48,7 @@ function PortConnector() {
     var startConnect = function () {
         $statusElement.html("");
         $buttonElement.val("Connecting...")
-                      .attr("disabled", "disabled");
+            .attr("disabled", "disabled");
 
         L8_serialPort.connect(selectedPort(), null);  // Port, bit rate
     };
@@ -55,21 +67,20 @@ function PortConnector() {
     };
 
     return {
-        onSerialPortConnect: onSerialPortConnect,
-        onSerialPortDisconnect: onSerialPortDisconnect,
         startDisconnect: startDisconnect,
         startConnect: startConnect,
-        fillPorts: fillPorts
+        fillPorts: fillPorts,
+        init: init
     }
-}
+};
 
-$(function() {
-    $("#btn_serial_connect").on("click", function() {
-        if( L8_serialPort.isConnected ) {
-            l8_tbm.portConnector.startDisconnect();
+$(function () {
+    $("#btn_serial_connect").on("click", function () {
+        if (L8_serialPort.isConnected) {
+            l8tbm.portConnector.startDisconnect();
         }
         else {
-            l8_tbm.portConnector.startConnect();
+            l8tbm.portConnector.startConnect();
         }
     });
 });

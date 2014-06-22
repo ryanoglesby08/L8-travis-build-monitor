@@ -3,19 +3,20 @@
     <script type="text/javascript" src="js/l8.slcp.class-1.0.js"></script>
     <script type="text/javascript" src="js/serialport.class-1.0.js"></script>
     <script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+    <script type="text/javascript" src="js/l8tbm.js"></script>
     <script type="text/javascript" src="js/portConnector.js"></script>
     <script type="text/javascript" src="js/color.js"></script>
     <script type="text/javascript" src="js/matrix.js"></script>
+    <script type="text/javascript" src="js/onscreenGrid.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
     <link rel="stylesheet" href="main.css" />
 </head>
 <body>
-  <input id="travis_url" type="text" /><button id="start_poll">Submit</button>
+  <input id="travis_url" type="text" /><button id="start_poll">Get Build Status</button>
 
-  <button id="turnon">Test</button>
-  <button id="turnoff">Off</button>
-  <button id="animation">Animate</button>
+  <button id="turn_on">Test</button>
+  <button id="turn_off">Off</button>
 
   <section>
       <label>Connection:</label>
@@ -23,5 +24,18 @@
   </section>
 
   <p id="errors"></p>
+
+  <table id="onscreen_grid" class="onscreen-grid">
+      <tbody>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+  </table>
 </body>
 </html>
