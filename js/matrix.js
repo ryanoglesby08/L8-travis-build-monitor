@@ -42,5 +42,5 @@ var failMatrix = function() {
 };
 
 var passMatrix = function() {
-  return solidMatrix(Color.GREEN);
+  return solidMatrix(Color.WHITNEY);
 };
